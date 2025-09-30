@@ -24,16 +24,37 @@ class XiaoMi:
         '''
         登录
         '''
+        # 新增请求头 登录检测IP 请求过多将会出现429错误
+        headers = {
+            "accept": "application/json, text/plain, */*",
+            "accept-language": "zh",
+            "app_name": "com.huami.webapp",
+            "cache-control": "no-cache",
+            "content-type": "application/x-www-form-urlencoded",
+            "lang": "zh",
+            "origin": "https://user.huami.com",
+            "pragma": "no-cache",
+            "priority": "u=1, i",
+            "referer": "https://user.huami.com/",
+            "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"Microsoft Edge\";v=\"140\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"Windows\"",
+            "sec-fetch-dest": "empty",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-site": "same-site",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 Edg/140.0.0.0",
+            "x-request-id": "f414421d-5ce5-4541-ba5b-87f4668fab1b"
+        }
         url = f'https://api-user.huami.com/registrations/{self.username}/tokens'
         data = {
-            'phone_number': self.username,
+            'name': self.username,
             'password': self.password,
             'client_id': 'HuaMi',
             'token': 'access',
             'redirect_uri': 'https://s3-us-west-2.amazonaws.com/hm-registration/successsignin.html'
         }
 
-        res = requests.post(url, data=data, headers=self.headers)
+        res = requests.post(url, data=data, headers=headers)
         if res.status_code == 200:
             # 重定向的Location
             redirect_location = res.history[0].headers['Location']
